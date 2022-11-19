@@ -4,7 +4,7 @@ use Library
 
 create table Authors
 (
-	Id int not null identity primary key,
+	Id uniqueidentifier primary key default newid(),
 	FirstName nvarchar(50) not null,
 	LastName nvarchar(50) not null,
 	Country nvarchar(100) not null,
@@ -13,28 +13,28 @@ create table Authors
 
 create table Books
 (
-	Id int not null identity primary key,
+	Id uniqueidentifier primary key default newid(),
 	Name nvarchar(100) not null,
-	AuthorId int not null references Authors (Id) on delete cascade,
+	AuthorId uniqueidentifier not null references Authors (Id) on delete cascade,
 	Year int not null check (Year<=year(getdate()))
 )
 
 create table Users
 (
-	Id int not null identity primary key,
+	Id uniqueidentifier primary key default newid(),
 	FirstName nvarchar(50) not null,
 	LastName nvarchar(50) not null,
 	Email nvarchar(100) not null unique,
 	BirthDate date not null check(BirthDate<=getdate()),
-	Age int not null check(Age >0 and Age <=120),
+	Age int null,
 	Address nvarchar(100) not null,
-	ExpiredDate date not null
+	ExpiredDate date null
 )
 
 create table UserBooks
 (
-	Id int not null identity primary key,
-	UserId int not null references Users (Id) on delete cascade,
-	BookId int not null references Books (Id) on delete cascade,
-	CreatedDate date not null
+	Id uniqueidentifier primary key default newid(),
+	UserId uniqueidentifier not null references Users (Id) on delete cascade,
+	BookId uniqueidentifier not null references Books (Id) on delete cascade,
+	CreatedDate date null
 )
